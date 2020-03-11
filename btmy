@@ -1,0 +1,29 @@
+#!/bin/bash
+#=========================================
+#
+# Edit by 4eburashk http://csn.net4me.net
+#    On Wed 11 Mar 2020 11:59:03 PM MSK
+#
+#			bluetooth on|off
+#=========================================
+# Сделал так. У меня БТ-звук подключает/отключает.
+# Обозвал btmy зачмодил, положил в bin и забиндил кнопки на "btmy on" и "btmy off". Ставить expect не хочу. 
+
+MAC="XX:XX:XX:XX:XX:XX"; #MAC подключаемого устройства.
+
+if [ -z $1 ];then
+	echo "use: $0 on|off";exit 1;
+fi
+
+case $1 in
+    on)
+		COM="connect $MAC\nquit";
+		echo -e $COM | bluetoothctl;
+    exit 0;
+    ;;
+    off)
+		COM="disconnect $MAC\nquit";
+		echo -e $COM | bluetoothctl;
+	exit 0;
+esac
+#END
