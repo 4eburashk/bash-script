@@ -1,0 +1,24 @@
+#!/bin/bash
+#=========================================
+#
+# Edit by 4eburashk http://csn.net4me.net
+#    On Fri 13 Mar 2020 12:55:49 AM MSK
+#
+#=========================================
+# чтение строк в json формате из файла (логов/сообщений) построчно. Типа:
+# { json line }
+# { second json line }
+# ...
+# { n json line }
+# суть:
+# while IFS= read -r line; do echo $line|python -m json.tool ; done <file.log
+
+if [ -z $1 ];then
+	echo "use: $0 path_to_json_file";exit 1;
+fi
+
+while IFS= read -r line; do 
+	echo "$line" | python -m json.tool; 
+done <"$1";
+
+#END
