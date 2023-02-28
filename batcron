@@ -1,27 +1,27 @@
 #!/bin/bash
 # 
-#   Edit by 4eburashk http://csn.net4me.net
-#     On Thu 24 Feb 2022 12:29:44 AM MSK
-#     Проверяем кроном состояние батареи ноута.
-#     Если разряд - кричим алертом в иксы.
-# */2 * * * * /home/user/bin/batcron >> $CRONLOG 2>&1;
+# 	Edit by 4eburashk http://csn.net4me.net
+# 		On Thu 24 Feb 2022 12:29:44 AM MSK
+#			Предсмертные вопли батарейки ноута.
+# */2 * * * * /home/ttl/bin/batcron >> $CRONLOG 2>&1;
 
 # Config:
 export XDG_RUNTIME_DIR="/run/user/$(id -u)";
-MAX=110;  # use 101 to disable.
-MIN=25; # use 0 to disable.
+MAX=101;	# use 101 to disable.
+MIN=21;		# use 0 to disable.
+DT=$(date +%a_%Y-%m-%d_%T);
 # end of Config.
 
 BATTERY_PATH=$(upower -e | grep battery);
 LINE_POWER_PATH=$(upower -e | grep line_power);
 CABLE_PLUGGED=$(upower -i $LINE_POWER_PATH | grep -A2 'line-power' | awk '/online:/ { print $2 }');
-BATTERY_PERCENTAGE=$(upower -i $BATTERY_PATH | awk '/percentage:/ { print $2 }' | sed 's/%//');
+BATTERY_PERCENTAGE=$(upower -i $BATTERY_PATH | awk '/percentage:/ { printf("%d",$2)}');
 
 if [[ $CABLE_PLUGGED == 'yes' ]]; then
-  [[ $BATTERY_PERCENTAGE -gt $MAX ]] && notify-send --urgency=critical "Перезаряд." "Аккумулятор заряжен ${MAX}%\nВыдерни шнурок, чтоб продлить жизнь акк.";
+	[[ $BATTERY_PERCENTAGE -gt $MAX ]] && notify-send --urgency=critical "Перезаряд." "Аккумулятор заряжен ${MAX}%\nВыдерни шнурок, чтоб продлить жизнь акк.";
 else
-  # если воткнут - не жужжим. 
-  [[ $BATTERY_PERCENTAGE -lt $MIN ]] && notify-send --urgency=critical "Батарейка" "Лишь у любви у нашей ${MIN}% батарейки...\nМилый, воткни шнурок плиз.";
+	# если воткнут - не жужжим.	
+	[[ $BATTERY_PERCENTAGE -lt $MIN ]] && notify-send --urgency=critical "Батарейка" "Лишь у любви у нашей ${BATTERY_PERCENTAGE}% батарейки...\nМилый, воткни шнурок плиз.";
 fi
 exit 0;
 # END
