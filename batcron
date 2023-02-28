@@ -9,7 +9,6 @@
 export XDG_RUNTIME_DIR="/run/user/$(id -u)";
 MAX=101;	# use 101 to disable.
 MIN=21;		# use 0 to disable.
-DT=$(date +%a_%Y-%m-%d_%T);
 # end of Config.
 
 BATTERY_PATH=$(upower -e | grep battery);
